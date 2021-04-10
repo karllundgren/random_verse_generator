@@ -102,11 +102,12 @@ josephSmithHistory = "josephSmithHistory"
 articlesOfFaith = "articlesOfFaith"
 
 #JSON FILES ------------------------------------------------------
-BOM_JSON = 'book-of-mormon.json'
-DC_JSON = 'doctrine-and-covenants.json'
-PGP_JSON = 'pearl-of-great-price.json'
-NT_JSON = 'new-testament.json'
-OT_JSON = 'old-testament.json'
+PATH_TO_JSON = 'static/'
+BOM_JSON = PATH_TO_JSON +  'book-of-mormon.json'
+DC_JSON = PATH_TO_JSON + 'doctrine-and-covenants.json'
+PGP_JSON = PATH_TO_JSON + 'pearl-of-great-price.json'
+NT_JSON = PATH_TO_JSON + 'new-testament.json'
+OT_JSON = PATH_TO_JSON + 'old-testament.json'
 
 #TOTALS ------------------------------------------------------
 TOTAL_OT_VERSES = 23145
@@ -191,20 +192,21 @@ class RangeDict(dict):
 
 def getBookOfMormonBookFinder():
     bookOfMormonBookFinder = RangeDict({
-        range(1, 618) : "oneNephi",
-        range(618, 1397) : "twoNephi",
-        range(1397, 1600) : "jacob",
-        range(1600, 1627) : "enos",
-        range(1627, 1642) : "jarom",
-        range(1642, 1672) : "omni",
-        range(1672, 1690) : "wordsOfMormon",
-        range(1690, 2475) : "mosiah",
-        range(2475, 4450) : "alma",
-        range(4450, 4947) : "helaman",
-        range(4947, 5732) : "threeNephi",
-        range(5732, 5781) : "fourNephi",
-        range(5781, 6008) : "mormon",
-        range(6008, 6441) : "ether",
-        range(6441, 6604) : "moroni",
+        range(1, 618) : 0,
+        range(618, 1397) : 1,
+        range(1397, 1600) : 2,
+        range(1600, 1627) : 3,
+        range(1627, 1642) : 4,
+        range(1642, 1672) : 5,
+        range(1672, 1690) : 6,
+        range(1690, 2475) : 7,
+        range(2475, 4450) : 8,
+        range(4450, 4947) : 9,
+        range(4947, 5732) : 10,
+        range(5732, 5781) : 11,
+        range(5781, 6008) : 12,
+        range(6008, 6441) : 13,
+        range(6441, 6604) : 14,
     })
     return bookOfMormonBookFinder
+

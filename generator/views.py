@@ -19,7 +19,7 @@ def index(request):
             volume = request.POST['volume']
             print("volume of Scripture: " + volume)
 
-            getScripture(volume)
+            result = getScripture(volume)
 
         else:
             print("form is INVALID")
@@ -29,7 +29,8 @@ def index(request):
         'index.html',
         context = {
          "oneNephi" : method,
-         "volume" : volume
+         "volume" : volume,
+         "scripture" : result
     }
     )
 
