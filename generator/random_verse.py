@@ -68,9 +68,12 @@ def pseudoGetRandomChapter(RANDOM_BOOK, volumeData):
 
 def pseudoGetRandomVerse(RANDOM_BOOK, RANDOM_CHAPTER, volumeData):
     # Get Random Verse
-    NUM_VERSE = len(volumeData['books'][RANDOM_BOOK]['chapters'][RANDOM_CHAPTER]['verses'])
+    VERSES = volumeData['books'][RANDOM_BOOK]['chapters'][RANDOM_CHAPTER]['verses']
+    NUM_VERSE = len(VERSES)
+    
     RANDOM_VERSE = random.randint(0, NUM_VERSE-1)
-    return RANDOM_VERSE
+    VERSE = volumeData['books'][RANDOM_BOOK]['chapters'][RANDOM_CHAPTER]['verses'][RANDOM_VERSE]
+    return [RANDOM_VERSE, VERSE]
 
 # Print the verse!
 #print("Random Book: " + str(RANDOM_BOOK))
@@ -116,11 +119,17 @@ def getScripture(volume):
     print("random book: " + str(RANDOM_BOOK))
 
     RANDOM_CHAPTER = pseudoGetRandomChapter(RANDOM_BOOK, volumeData)
-    RANDOM_VERSE = pseudoGetRandomVerse(RANDOM_BOOK, RANDOM_CHAPTER, volumeData)
+    VERSE_INFO = pseudoGetRandomVerse(RANDOM_BOOK, RANDOM_CHAPTER, volumeData)
+    RANDOM_VERSE = VERSE_INFO[0]
+    VERSE_REFERENCE = VERSE_INFO[1]['reference']
+    VERSE_TEXT = VERSE_INFO[1]['text']
+
     result = [
         RANDOM_BOOK,
         RANDOM_CHAPTER,
         RANDOM_VERSE,
+        VERSE_REFERENCE,
+        VERSE_TEXT,
     ]
     print(result)
     return result

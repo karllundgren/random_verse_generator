@@ -9,7 +9,7 @@ from .random_verse import getScripture
 def index(request):
     method = "GET"
     volume = ""
-    
+    result = ""
     form = DetermineVolumeForm(request.POST)
     
     if request.method == 'POST':
@@ -18,19 +18,19 @@ def index(request):
             print("form is VALID")
             volume = request.POST['volume']
             print("volume of Scripture: " + volume)
-
             result = getScripture(volume)
 
         else:
             print("form is INVALID")
             print(form.errors)
+            
     return render(
         request,
         'index.html',
         context = {
-         "oneNephi" : method,
          "volume" : volume,
-         "scripture" : result
+         "verse_reference" : result[3],
+         "verse_text" : result[4],
     }
     )
 

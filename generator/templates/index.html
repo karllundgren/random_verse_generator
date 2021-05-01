@@ -1,7 +1,8 @@
 
-<h1>{{ oneNephi }}</h1>
 <h1>{{ volume }}</h1>
-<h1>{{ scripture }}</h1>
+<h1>{{ verse_reference }}</h1>
+<h1>{{ verse_text }}</h1>
+
 <form action="{% url 'index'%}" method="post">
     {% csrf_token %}
     <label for="volume">Choose a volume of scripture:</label>
