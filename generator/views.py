@@ -23,15 +23,22 @@ def index(request):
         else:
             print("form is INVALID")
             print(form.errors)
-            
+    print("result length:" + str(len(result)))
+    if len(result) > 0:
+        context = {
+            "volume" : volume,
+            "verse_reference" : result[3],
+            "verse_text" : result[4],
+            "link_to_verse" : result[5],
+        }
+    else:
+        context = {
+        }
     return render(
         request,
         'index.html',
-        context = {
-         "volume" : volume,
-         "verse_reference" : result[3],
-         "verse_text" : result[4],
-    }
+        context
+
     )
 
 

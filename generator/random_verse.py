@@ -6,40 +6,13 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 
 # True random verses*******************************************************************
 def getRandomBook(TOTAL_VERSES, getBookFinder):
-    # Get Random Book
-    
 
     # Weight books according to number of verses (books with more verses get more hits)
-    
     RANDOM_NUMBER = random.randint(1, TOTAL_BOM_VERSES)
+
     #RANDOM_BOOK = getBook(RANDOM_NUMBER)
     RANDOM_BOOK = getBookFinder[RANDOM_NUMBER]
-    """
-    if volume == oldTestament:
-        RANDOM_NUMBER = random.randint(1, TOTAL_BOM_VERSES)
-        #RANDOM_BOOK = getBook(RANDOM_NUMBER)
-        RANDOM_BOOK = getBookOfMormonBookFinder()[RANDOM_NUMBER]
-    elif volume == newTestament:
-        RANDOM_NUMBER = random.randint(1, TOTAL_BOM_VERSES)
-        #RANDOM_BOOK = getBook(RANDOM_NUMBER)
-        RANDOM_BOOK = bookOfMormonBookFinder[RANDOM_NUMBER]
-    elif volume == bookOfMormon:
-        RANDOM_NUMBER = random.randint(1, TOTAL_BOM_VERSES)
-        #RANDOM_BOOK = getBook(RANDOM_NUMBER)
-        RANDOM_BOOK = bookOfMormonBookFinder[RANDOM_NUMBER]
-    elif volume == doctrineAndCovenants:
-        RANDOM_NUMBER = random.randint(1, TOTAL_BOM_VERSES)
-        #RANDOM_BOOK = getBook(RANDOM_NUMBER)
-        RANDOM_BOOK = bookOfMormonBookFinder[RANDOM_NUMBER]
-    elif volume == pearlOfGreatPrice:
-        RANDOM_NUMBER = random.randint(1, TOTAL_BOM_VERSES)
-        #RANDOM_BOOK = getBook(RANDOM_NUMBER)
-        RANDOM_BOOK = bookOfMormonBookFinder[RANDOM_NUMBER]
-    else:
-        # This is an error condition!
-        print("Invalid volume received in function: getScripture, volume: " + volume)
-        RANDOM_BOOK = "INVALID VOLUME ERROR"
-    """
+
     return RANDOM_BOOK
 
 #**************************************************************************************
@@ -83,29 +56,79 @@ def pseudoGetRandomVerse(RANDOM_BOOK, RANDOM_CHAPTER, volumeData):
 
 #****************************************************************************************
 
+def generateLinkToVerse(URL_VOLUME, RANDOM_BOOK, BOOK_URLS, RANDOM_CHAPTER, RANDOM_VERSE):
+    
+    # Examples Below:
+    # BOM   https://www.churchofjesuschrist.org/study/scriptures/bofm/jacob/7.27?lang=eng#p27#27
+    # D&C   https://www.churchofjesuschrist.org/study/scriptures/dc-testament/dc/3.18?lang=eng#p18#18
+    # Pearl https://www.churchofjesuschrist.org/study/scriptures/pgp/moses/1.42?lang=eng#p42#42
+    # OT    https://www.churchofjesuschrist.org/study/scriptures/ot/1-sam/15.6?lang=eng#p6#6
+    # NT    https://www.churchofjesuschrist.org/study/scriptures/nt/1-cor/16.15?lang=eng#p15#15
+    
+    """
+    Order of Concatenation:
+        1. BASE_URL                 https://www.churchofjesuschrist.org/study/scriptures/
+        2. URL_VOLUME               dc-testament/
+        3. URL_BOOK                 dc/
+        3. URL_VERSE                3.18?
+        4. url_language             lang=eng
+        5. URL_VERSE_HIGHLIGHTER    #p18#18
+    """
+    BASE_URL = 'https://www.churchofjesuschrist.org/study/scriptures/'
+    # URL_VOLUME is passed in
+    
+    if BOOK_URLS[0] == "dc":
+        URL_BOOK = BOOK_URLS[0] + "/"
+    else:
+        URL_BOOK = BOOK_URLS[RANDOM_BOOK] + "/"
+    
+    URL_VERSE = str(RANDOM_CHAPTER + 1) + "." + str(RANDOM_VERSE + 1) + "?"
+    url_language = "lang=eng"
+    url_VERSE_HIGHLIGHTER = "#p" + str(RANDOM_VERSE + 1) + "#" + str(RANDOM_VERSE + 1)
+   
+
+   
+    URL_FINAL = BASE_URL + URL_VOLUME + URL_BOOK + URL_VERSE + url_language + url_VERSE_HIGHLIGHTER
+    return URL_FINAL
+
 
 def getScripture(volume):
     random.seed()
     if volume == oldTestament:
+        # OLD TESTAMENT
         TOTAL_VERSES = TOTAL_BOM_VERSES
         getBookFinder = getBookOfMormonBookFinder()
         jsonVolumeFile = BOM_JSON
+        URL_VOLUME = "ot/"
+        BOOK_URLS = OT_URLS
     elif volume == newTestament:
+        # NEW TESTAMENT
         TOTAL_VERSES = TOTAL_BOM_VERSES
         getBookFinder = getBookOfMormonBookFinder()
         jsonVolumeFile = BOM_JSON
+        URL_VOLUME = "nt/"
+        BOOK_URLS = NT_URLS
     elif volume == bookOfMormon:
+        # BOOK OF MORMON
         TOTAL_VERSES = TOTAL_BOM_VERSES
         getBookFinder = getBookOfMormonBookFinder()
         jsonVolumeFile = BOM_JSON
+        URL_VOLUME = "bofm/"
+        BOOK_URLS = BOM_URLS
     elif volume == doctrineAndCovenants:
+        # DOCTRINE AND COVENANTS
         TOTAL_VERSES = TOTAL_BOM_VERSES
         getBookFinder = getBookOfMormonBookFinder()
         jsonVolumeFile = BOM_JSON
+        URL_VOLUME = "dc-testament/"
+        BOOK_URLS = DC_URLS
     elif volume == pearlOfGreatPrice:
+        # PEARL OF GREAT PRICE
         TOTAL_VERSES = TOTAL_BOM_VERSES
         getBookFinder = getBookOfMormonBookFinder()
         jsonVolumeFile = BOM_JSON
+        URL_VOLUME = "pgp/"
+        BOOK_URLS = PGP_URLS
     else:
         # This is an error condition!
         print("Invalid volume received in function: getScripture, volume: " + volume)
@@ -123,6 +146,14 @@ def getScripture(volume):
     RANDOM_VERSE = VERSE_INFO[0]
     VERSE_REFERENCE = VERSE_INFO[1]['reference']
     VERSE_TEXT = VERSE_INFO[1]['text']
+    
+    LINK_TO_VERSE = generateLinkToVerse(URL_VOLUME, RANDOM_BOOK, BOOK_URLS, RANDOM_CHAPTER, RANDOM_VERSE)
+
+
+
+
+
+    
 
     result = [
         RANDOM_BOOK,
@@ -130,6 +161,7 @@ def getScripture(volume):
         RANDOM_VERSE,
         VERSE_REFERENCE,
         VERSE_TEXT,
+        LINK_TO_VERSE
     ]
     print(result)
     return result
