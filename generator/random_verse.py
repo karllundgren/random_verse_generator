@@ -8,9 +8,10 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 def getRandomBook(TOTAL_VERSES, getBookFinder):
 
     # Weight books according to number of verses (books with more verses get more hits)
-    RANDOM_NUMBER = random.randint(1, TOTAL_BOM_VERSES)
+    RANDOM_NUMBER = random.randint(1, TOTAL_VERSES)
 
     #RANDOM_BOOK = getBook(RANDOM_NUMBER)
+    print("RANDOM_BOOK_NUMBER: " + str(RANDOM_NUMBER))
     RANDOM_BOOK = getBookFinder[RANDOM_NUMBER]
 
     return RANDOM_BOOK
@@ -27,7 +28,12 @@ def getRandomBook(TOTAL_VERSES, getBookFinder):
     #RANDOM_BOOK = random.randint(0, NUM_BOOKS-1)
     #print("Random Book: " + str(RANDOM_BOOK))
 
-def pseudoGetRandomChapter(RANDOM_BOOK, volumeData):
+def pseudoGetRandomChapter(RANDOM_BOOK, volumeData, isDC):
+    if isDC:
+        NUM_CHAPTERS = len(volumeData['sections'])
+        RANDOM_CHAPTER = random.randint(0, NUM_CHAPTERS-1)
+        return RANDOM_CHAPTER
+
     # Get Random Chapter
     print("volumeData: " + str(type(volumeData)))
     print("volumeData['books'] type: " + str(type(volumeData['books'])))
@@ -39,7 +45,16 @@ def pseudoGetRandomChapter(RANDOM_BOOK, volumeData):
     RANDOM_CHAPTER = random.randint(0, NUM_CHAPTERS-1)
     return RANDOM_CHAPTER
 
-def pseudoGetRandomVerse(RANDOM_BOOK, RANDOM_CHAPTER, volumeData):
+def pseudoGetRandomVerse(RANDOM_BOOK, RANDOM_CHAPTER, volumeData, isDC):
+    if isDC:
+        # Get Random Verse 
+        NUM_VERSE = len(volumeData['sections'][RANDOM_BOOK]['verses'])
+        
+        RANDOM_VERSE = random.randint(0, NUM_VERSE-1)
+        VERSE = volumeData['sections'][RANDOM_BOOK]['verses'][RANDOM_VERSE]
+        return [RANDOM_VERSE, VERSE]
+
+
     # Get Random Verse
     VERSES = volumeData['books'][RANDOM_BOOK]['chapters'][RANDOM_CHAPTER]['verses']
     NUM_VERSE = len(VERSES)
@@ -94,18 +109,19 @@ def generateLinkToVerse(URL_VOLUME, RANDOM_BOOK, BOOK_URLS, RANDOM_CHAPTER, RAND
 
 def getScripture(volume):
     random.seed()
+    isDC = False
     if volume == oldTestament:
         # OLD TESTAMENT
-        TOTAL_VERSES = TOTAL_BOM_VERSES
-        getBookFinder = getBookOfMormonBookFinder()
-        jsonVolumeFile = BOM_JSON
+        TOTAL_VERSES = TOTAL_OT_VERSES
+        getBookFinder = getOldTestamentBookFinder()
+        jsonVolumeFile = OT_JSON
         URL_VOLUME = "ot/"
         BOOK_URLS = OT_URLS
     elif volume == newTestament:
         # NEW TESTAMENT
-        TOTAL_VERSES = TOTAL_BOM_VERSES
-        getBookFinder = getBookOfMormonBookFinder()
-        jsonVolumeFile = BOM_JSON
+        TOTAL_VERSES = TOTAL_NT_VERSES
+        getBookFinder = getNewTestamentBookFinder()
+        jsonVolumeFile = NT_JSON
         URL_VOLUME = "nt/"
         BOOK_URLS = NT_URLS
     elif volume == bookOfMormon:
@@ -117,16 +133,17 @@ def getScripture(volume):
         BOOK_URLS = BOM_URLS
     elif volume == doctrineAndCovenants:
         # DOCTRINE AND COVENANTS
-        TOTAL_VERSES = TOTAL_BOM_VERSES
-        getBookFinder = getBookOfMormonBookFinder()
-        jsonVolumeFile = BOM_JSON
+        TOTAL_VERSES = TOTAL_DC_VERSES
+        getBookFinder = getDoctrineAndCovenantsBookFinder()
+        jsonVolumeFile = DC_JSON
         URL_VOLUME = "dc-testament/"
         BOOK_URLS = DC_URLS
+        isDC = True
     elif volume == pearlOfGreatPrice:
         # PEARL OF GREAT PRICE
-        TOTAL_VERSES = TOTAL_BOM_VERSES
-        getBookFinder = getBookOfMormonBookFinder()
-        jsonVolumeFile = BOM_JSON
+        TOTAL_VERSES = TOTAL_PGP_VERSES
+        getBookFinder = getPearlOfGreatPriceBookFinder()
+        jsonVolumeFile = PGP_JSON
         URL_VOLUME = "pgp/"
         BOOK_URLS = PGP_URLS
     else:
@@ -135,14 +152,14 @@ def getScripture(volume):
         RANDOM_BOOK = "INVALID VOLUME ERROR" 
 
 
-    volumeData = json.load(open(jsonVolumeFile, 'r'))
+    volumeData = json.load(open(jsonVolumeFile, 'r',encoding='utf8'))
     #print("volumeData: " + str(type(volumeData)))
     #print(volumeData)
     RANDOM_BOOK = getRandomBook(TOTAL_VERSES, getBookFinder)
     print("random book: " + str(RANDOM_BOOK))
 
-    RANDOM_CHAPTER = pseudoGetRandomChapter(RANDOM_BOOK, volumeData)
-    VERSE_INFO = pseudoGetRandomVerse(RANDOM_BOOK, RANDOM_CHAPTER, volumeData)
+    RANDOM_CHAPTER = pseudoGetRandomChapter(RANDOM_BOOK, volumeData, isDC)
+    VERSE_INFO = pseudoGetRandomVerse(RANDOM_BOOK, RANDOM_CHAPTER, volumeData, isDC)
     RANDOM_VERSE = VERSE_INFO[0]
     VERSE_REFERENCE = VERSE_INFO[1]['reference']
     VERSE_TEXT = VERSE_INFO[1]['text']
