@@ -4,7 +4,7 @@
 <h1>{{ verse_text }}</h1>
 <h1></h1>
 
-<a href="{{ link_to_verse }}">Go To Scripture</a>
+<a href="{{ link_to_verse }}"  target="_blank">Go To Scripture</a>
 
 <form action="{% url 'index'%}" method="post">
     {% csrf_token %}

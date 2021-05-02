@@ -30,9 +30,9 @@ def getRandomBook(TOTAL_VERSES, getBookFinder):
 
 def pseudoGetRandomChapter(RANDOM_BOOK, volumeData, isDC):
     if isDC:
-        NUM_CHAPTERS = len(volumeData['sections'])
-        RANDOM_CHAPTER = random.randint(0, NUM_CHAPTERS-1)
-        return RANDOM_CHAPTER
+        # Because D&C has only sections and verses (not books, chapters, and verses),
+        # We assign RANDOM_BOOK and RANDOM_CHAPTER the same value for ease of implementation
+        return RANDOM_BOOK
 
     # Get Random Chapter
     print("volumeData: " + str(type(volumeData)))
@@ -96,7 +96,9 @@ def generateLinkToVerse(URL_VOLUME, RANDOM_BOOK, BOOK_URLS, RANDOM_CHAPTER, RAND
         URL_BOOK = BOOK_URLS[0] + "/"
     else:
         URL_BOOK = BOOK_URLS[RANDOM_BOOK] + "/"
-    
+    print("DC DEBUG*********************************************")
+    print(RANDOM_CHAPTER)
+    print(RANDOM_VERSE)
     URL_VERSE = str(RANDOM_CHAPTER + 1) + "." + str(RANDOM_VERSE + 1) + "?"
     url_language = "lang=eng"
     url_VERSE_HIGHLIGHTER = "#p" + str(RANDOM_VERSE + 1) + "#" + str(RANDOM_VERSE + 1)
@@ -104,6 +106,7 @@ def generateLinkToVerse(URL_VOLUME, RANDOM_BOOK, BOOK_URLS, RANDOM_CHAPTER, RAND
 
    
     URL_FINAL = BASE_URL + URL_VOLUME + URL_BOOK + URL_VERSE + url_language + url_VERSE_HIGHLIGHTER
+    print("DC DEBUG*********************************************")
     return URL_FINAL
 
 
