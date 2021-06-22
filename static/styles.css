@@ -1,0 +1,23 @@
+
+.background {
+    background-color:  #ffffff;
+}
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
+
+  .inner-container {
+
+    width: 75%;
+  }
+
+  .scripture {
+      text-decoration: none;
+  }
+
+.footer {
+    text-align: center;
+}

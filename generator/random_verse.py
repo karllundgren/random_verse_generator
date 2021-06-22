@@ -3,6 +3,12 @@ import random
 from .constants import *
 from django.contrib.staticfiles.storage import staticfiles_storage
 
+def volumeFinder():
+    RANDOM_NUMBER = random.randint(1, TOTAL_SCRIPTURE_VERSES)
+    vFinder = getVolumeFinder()
+    volume = ScriptureVolumes[vFinder[RANDOM_NUMBER]]
+    print("volume in volumeFinder: " + volume)
+    return volume
 
 # True random verses*******************************************************************
 def getRandomBook(TOTAL_VERSES, getBookFinder):
@@ -39,8 +45,8 @@ def pseudoGetRandomChapter(RANDOM_BOOK, volumeData, isDC):
     print("volumeData['books'] type: " + str(type(volumeData['books'])))
 
     #NUM_CHAPTERS = len(volumeData['books'][RANDOM_BOOK]['chapters'])
-    NUM_CHAPTERS = len(volumeData['books'][RANDOM_BOOK])
-    
+    NUM_CHAPTERS = len(volumeData['books'][RANDOM_BOOK]['chapters'])
+    print("Book Index: " + str(RANDOM_BOOK))
     print("NUM_CHAPTERS: " + str(NUM_CHAPTERS))
     RANDOM_CHAPTER = random.randint(0, NUM_CHAPTERS-1)
     return RANDOM_CHAPTER
@@ -53,6 +59,18 @@ def pseudoGetRandomVerse(RANDOM_BOOK, RANDOM_CHAPTER, volumeData, isDC):
         RANDOM_VERSE = random.randint(0, NUM_VERSE-1)
         VERSE = volumeData['sections'][RANDOM_BOOK]['verses'][RANDOM_VERSE]
         return [RANDOM_VERSE, VERSE]
+
+    print("Book: " + str(RANDOM_BOOK))
+    print("Chapter: " + str(RANDOM_CHAPTER))
+    print("books length: "+ str(len(volumeData['books'])))
+    print("chapters length: "+ str(len(volumeData['books'][RANDOM_BOOK]['chapters'])))
+    print("verse length: "+ str(len(volumeData['books'][RANDOM_BOOK]['chapters'][RANDOM_CHAPTER]['verses'])))
+
+
+
+
+
+
 
 
     # Get Random Verse
@@ -113,6 +131,10 @@ def generateLinkToVerse(URL_VOLUME, RANDOM_BOOK, BOOK_URLS, RANDOM_CHAPTER, RAND
 def getScripture(volume):
     random.seed()
     isDC = False
+    if volume == allScriptures:
+        # Verse can be from any of all of the 5 STANDARD WORKS
+        volume = volumeFinder()
+
     if volume == oldTestament:
         # OLD TESTAMENT
         TOTAL_VERSES = TOTAL_OT_VERSES
@@ -181,7 +203,8 @@ def getScripture(volume):
         RANDOM_VERSE,
         VERSE_REFERENCE,
         VERSE_TEXT,
-        LINK_TO_VERSE
+        LINK_TO_VERSE,
+        volume,
     ]
     print(result)
     return result

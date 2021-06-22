@@ -7,7 +7,6 @@ from .random_verse import getScripture
 
 # Create your views here.
 def index(request):
-    method = "GET"
     volume = ""
     result = ""
     form = DetermineVolumeForm(request.POST)
@@ -23,10 +22,13 @@ def index(request):
         else:
             print("form is INVALID")
             print(form.errors)
-    print("result length:" + str(len(result)))
+    elif request.method == 'GET':
+        result = getScripture(allScriptures)
+
+    #print("result length:" + str(len(result)))
     if len(result) > 0:
         context = {
-            "volume" : volume,
+            "volume" : result[6],
             "verse_reference" : result[3],
             "verse_text" : result[4],
             "link_to_verse" : result[5],

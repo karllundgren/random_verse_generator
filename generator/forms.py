@@ -7,6 +7,7 @@ from .constants import *
 
 class DetermineVolumeForm(forms.Form):
     VOLUME_CHOICES = (
+        (allScriptures, allScriptures),
         (oldTestament, oldTestament),
         (newTestament, newTestament),
         (bookOfMormon, bookOfMormon),
@@ -15,6 +16,7 @@ class DetermineVolumeForm(forms.Form):
 
     )
     VOLUME_CHOICES_LIST = [
+        allScriptures,
         oldTestament,
         newTestament,
         bookOfMormon,

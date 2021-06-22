@@ -5,7 +5,8 @@ newTestament = "New Testament"
 bookOfMormon = "Book of Mormon"
 doctrineAndCovenants = "Doctrine and Covenants"
 pearlOfGreatPrice = "Pearl of Great Price"
-
+allScriptures = "All Scriptures"
+ScriptureVolumes = [oldTestament, newTestament, bookOfMormon, doctrineAndCovenants, pearlOfGreatPrice]
 #BOOK URLS---------------------------------------------------
 BOM_URLS = [
     "1-ne",
@@ -215,7 +216,7 @@ TOTAL_OT_VERSES = 23145
 TOTAL_OT_CHAPTERS = 929
 
 TOTAL_NT_VERSES = 7958
-TOTAL_NT_VERSES = 260
+TOTAL_NT_CHAPTERS = 260
 
 TOTAL_BOM_VERSES = 6604
 
@@ -223,8 +224,9 @@ TOTAL_DC_VERSES = 3654
 TOTAL_DC_SECTIONS = 138
 
 TOTAL_PGP_VERSES = 635
-TOTAL_PGP_VERSES = 16
+TOTAL_PGP_CHAPTERS = 16
 
+TOTAL_SCRIPTURE_VERSES = TOTAL_OT_VERSES + TOTAL_NT_VERSES + TOTAL_BOM_VERSES + TOTAL_DC_VERSES + TOTAL_PGP_VERSES
 
 #DICTIONARIES ------------------------------------------------------
 numVersesInBook = {
@@ -539,3 +541,13 @@ def getPearlOfGreatPriceBookFinder():
         range(622, 635) : 4,
     })
     return pearlOfGreatPriceBookFinder
+
+def getVolumeFinder():
+    volumeRangeFinder = RangeDict({
+        range(1, TOTAL_OT_VERSES) : 0,
+        range(TOTAL_OT_VERSES, TOTAL_OT_VERSES + TOTAL_NT_VERSES) : 1,
+        range(TOTAL_OT_VERSES + TOTAL_NT_VERSES, TOTAL_OT_VERSES + TOTAL_NT_VERSES + TOTAL_BOM_VERSES) : 2,
+        range(TOTAL_OT_VERSES + TOTAL_NT_VERSES + TOTAL_BOM_VERSES, TOTAL_OT_VERSES + TOTAL_NT_VERSES + TOTAL_BOM_VERSES + TOTAL_DC_VERSES) : 3,
+        range(TOTAL_OT_VERSES + TOTAL_NT_VERSES + TOTAL_BOM_VERSES + TOTAL_DC_VERSES, TOTAL_OT_VERSES + TOTAL_NT_VERSES + TOTAL_BOM_VERSES + TOTAL_DC_VERSES + TOTAL_PGP_VERSES) : 4,
+    })
+    return volumeRangeFinder

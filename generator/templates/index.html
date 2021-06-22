@@ -1,23 +1,43 @@
 
-<h1>{{ volume }}</h1>
-<h1>{{ verse_reference }}</h1>
-<h1>{{ verse_text }}</h1>
-<h1></h1>
+{% extends "base_generic.html" %}
 
-<a href="{{ link_to_verse }}"  target="_blank">Go To Scripture</a>
+{% block content %}
+{% load static %} 
+    <div class="banner-div">
+        <img class="center" src="{% static 'flipping-pages.jpg' %}" >
+    </div>
+    <div  class="inner-container center" >
+        <article href="{{ link_to_verse }}" target="_blank" class="section-text align-center text-light display-5 center">   
+            <a href="{{ link_to_verse }}"  target="_blank" class="text-dark scripture">
+                <h3>{{ verse_reference }} (<span id="currentVolume">{{volume}}</span>)</h3> 
+                <h4>{{ verse_text }}</h4>
+            </a>
+        </article>
+    </div>      
+    
+    <form  action="{% url 'index'%}" method="post">
+        {% csrf_token %}
+        <label class="h4" for="volume">Choose a volume of scripture:</label>
+        <br>
+        <select id="volume" name="volume" onchange="this.form.submit()">
+            <option value="All Scriptures">All Scriptures</option>
+            <option value="Old Testament">Old Testament</option>
+            <option value="New Testament">New Testament</option>
+            <option value="Book of Mormon">Book of Mormon</option>
+            <option value="Doctrine and Covenants">Doctrine and Covenants</option>
+            <option value="Pearl of Great Price">Pearl of Great Price</option>
+        </select>
+        <br>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+    <script>
+        Array.from(document.querySelector("#volume").options).forEach(function(option_element) {
+            let currentVolume=document.querySelector("#currentVolume").textContent;
+            if (option_element.value === currentVolume){
+                option_element.selected = true;
+            }
+        });
+    </script>
 
-<form action="{% url 'index'%}" method="post">
-    {% csrf_token %}
-    <label for="volume">Choose a volume of scripture:</label>
-    <br>
-    <select id="volume" name="volume">
-        <option value="Old Testament">Old Testament</option>
-        <option value="New Testament">New Testament</option>
-        <option value="Book of Mormon">Book of Mormon</option>
-        <option value="Doctrine and Covenants">Doctrine and Covenants</option>
-        <option value="Pearl of Great Price">Pearl of Great Price</option>
-    </select>
-    <br>
-    <br>
-    <input type="submit" value="Submit">
-</form>
+{% endblock %}
